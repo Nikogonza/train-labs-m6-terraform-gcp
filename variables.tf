@@ -1,8 +1,6 @@
 ## GLOBAL ENVIRONMENT
-#variable "project" {}
+variable "project" {}
 variable "credentials_file" {}
-# variable "region" {}
-# variable "zone" {}
 
 ## VPC ENVIRONMENT
 variable "net_name" {}

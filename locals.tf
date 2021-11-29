@@ -2,8 +2,8 @@ locals {
   env = terraform.workspace == "default" ? "not use default workspace, instead use dev (dev), prod       (prod      )" : terraform.workspace
   
   project_ids = {
-    dev              = "znt-sqmworkshop-01"
-    prod             = "znt-sqmworkshop-01"
+    dev              = var.project
+    prod             = var.project
   }
   environments = {
     dev              = "dev"
