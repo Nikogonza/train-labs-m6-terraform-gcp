@@ -15,7 +15,9 @@
 
 
 steps:
-  - name: 'hashicorp/terraform:1.0.0'
+  - id: tf init
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: sh
     env:
       - PROD_GOOGLE_APPLICATION_CREDENTIALS=${_PROD_GOOGLE_APPLICATION_CREDENTIALS}
       - DEV_GOOGLE_APPLICATION_CREDENTIALS=${_DEV_GOOGLE_APPLICATION_CREDENTIALS}
@@ -36,7 +38,7 @@ steps:
 
           terraform init \
             -backend-config="bucket=$$PROD_TF_BACKEND" \
-            -backend-config="prefix=tf-app-prod" \
+            -backend-config="prefix=tf-app" \
             -backend-config="credentials=./credentials.json"
           terraform workspace select prod
         fi
@@ -45,14 +47,17 @@ steps:
           echo $$DEV_TF_VARS | base64 -d > terraform.tfvars
           terraform init \
             -backend-config="bucket=$$DEV_TF_BACKEND" \
-            -backend-config="prefix=tf-app-dev" \
+            -backend-config="prefix=tf-app" \
             -backend-config="credentials=./credentials.json"
           terraform workspace select dev
         fi 
-    id: tf init
-    entrypoint: sh
+    
+    
+# [END tf-init]
   
-  - name: 'hashicorp/terraform:1.0.0'
+  - id: tf plan
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: sh
     args:
       - '-c'
       - |
@@ -61,10 +66,6 @@ steps:
         echo "*************************************************"
         
         terraform plan -var-file="terraform.tfvars"
-
-    id: tf plan
-    entrypoint: sh
-
 # [END tf-plan]
 
 # [START tf-apply]
@@ -74,12 +75,11 @@ steps:
     args: 
     - '-c'
     - | 
-        if [ "${BRANCH_NAME}" == "dev"  ]; then
-          cd environments/$BRANCH_NAME      
-          terraform apply -auto-approve
-        else
+        if [[ "${BRANCH_NAME}" != 'main'  &&  "${BRANCH_NAME}" != 'dev' ]]; then     
           echo "***************************** SKIPPING APPLYING *******************************"
           echo "Branch '$BRANCH_NAME' does not represent an oficial environment."
           echo "*******************************************************************************"
+        else
+          terraform apply -auto-approve
         fi
 # [END tf-apply] 
