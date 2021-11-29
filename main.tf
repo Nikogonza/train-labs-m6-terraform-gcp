@@ -2,7 +2,7 @@
 # RESOURCE - NETWORK
 module "vpc" {
   source          = "./modules/terraform-gcp-vpc"
-  network_name    = "${var.network_name}-${local.environment}"
+  network_name    = "${var.net_name}-${local.environment}"
 }
 
 # RESOURCE - COMPUTE INSTANCE
