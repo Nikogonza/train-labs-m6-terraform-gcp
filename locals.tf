@@ -6,8 +6,8 @@ locals {
     prod             = var.project
   }
   environments = {
-    dev              = "dev"
-    prod             = "prod"
+    dev              = "devs"
+    prod             = "prods"
   }
 
   regions = {
