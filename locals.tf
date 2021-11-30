@@ -12,12 +12,12 @@ locals {
 
   regions = {
     dev              = "us-central1"
-    prod             = "us-central1"
+    prod             = "us-east1"
   }
 
   zones = {
     dev              = "us-central1-c"
-    prod             = "us-central1-c"
+    prod             = "us-east1-b"
   }
  # lookup recupera el valor de un solo elemento de un mapa, dada su clave. Si la clave dada no existe, se devuelve el valor predeterminado dado.
  # lookup(map, key, default) 
