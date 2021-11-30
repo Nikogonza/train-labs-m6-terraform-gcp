@@ -13,8 +13,21 @@
 # limitations under the License.
 
 
-
 steps:
+# [START tf-checkov]
+  - id: tf checkov
+    name: 'bridgecrew/checkov:latest'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        checkov -d . -o junitxml | tee checkov.test.xml
+        script -q -c 'checkov -d . ; echo $? > CKVEXIT'
+        cat CKVEXIT
+        exit 0
+# [END tf-checkov]
+
+# [START tf-init]
   - id: tf init
     name: 'hashicorp/terraform:1.0.0'
     entrypoint: sh
@@ -51,9 +64,8 @@ steps:
             -backend-config="credentials=./credentials.json"
           terraform workspace select dev
         fi 
-    
-    
 # [END tf-init]
+
 # [START tf-validate]
   - id: tf validate
     name: 'hashicorp/terraform:1.0.0'
