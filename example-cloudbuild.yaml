@@ -54,7 +54,16 @@ steps:
     
     
 # [END tf-init]
-  
+# [START tf-validate]
+  - id: tf validate
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: sh
+    args:
+      - '-c'
+      - |
+        terraform validate 
+# [END tf-validate]
+# [START tf-plan]
   - id: tf plan
     name: 'hashicorp/terraform:1.0.0'
     entrypoint: sh
